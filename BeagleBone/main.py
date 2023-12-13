@@ -24,17 +24,19 @@ def executeScriptsFromFile(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    templateData = {
-        'title' : 'Hello world', #wszystkie rzeczy przekazywane do html
-        'przyklad' : 'Testowy tekst',
-    }
+
     if request.method == 'POST':
         if request.form.get('action1') == 'VALUE1':
             print("Buton1")
         elif  request.form.get('action2') == 'VALUE2':
             print("Buton2")
-        else:
-            pass # unknown
+        elif  request.form.get('action3') == 'VALUE3':
+            print("Buton3")
+
+    templateData = {
+        'title' : 'Hello world', #wszystkie rzeczy przekazywane do html
+        'przyklad' : 'Testowy tekst',
+    }
     return render_template('site.html', **templateData)
 
 
