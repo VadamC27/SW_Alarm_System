@@ -1,8 +1,8 @@
-
 #!/usr/bin/env python
 
-from flask import Flask
+from flask import Flask, render_template, request
 import sqlite3
+from sqlite3 import OperationalError
 
 app = Flask(__name__)
 
@@ -19,16 +19,22 @@ def executeScriptsFromFile(filename):
     for command in sqlCommands:
         try:
             c.execute(command)
-        except OperationalError, msg:
+        except OperationalError as msg:
             print("Command skipped: ", msg)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
     templateData = {
         'title' : 'Hello world', #wszystkie rzeczy przekazywane do html
         'przyklad' : 'Testowy tekst',
     }
-
+    if request.method == 'POST':
+        if request.form.get('action1') == 'VALUE1':
+            print("Buton1")
+        elif  request.form.get('action2') == 'VALUE2':
+            print("Buton2")
+        else:
+            pass # unknown
     return render_template('site.html', **templateData)
 
 
