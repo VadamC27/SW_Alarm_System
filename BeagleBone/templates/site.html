@@ -1,21 +1,30 @@
 <!DOCTYPE html>
-<style>
-    .content {
-      max-width: 500px;
-      margin: auto;
-    }
+    <style>
+        .content {
+            max-width: 500px;
+            margin: auto;
+        }
     </style>
     <head> 
         <title>{{ title }}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
         <div class="content">
-            <h1>Hello, World!</h1>
-            <h2>Przyklad {{ test }}</h2>
-            <form method="post" action="/">
-                <input type="submit" value="VALUE1" name="action1"/>
-                <input type="submit" value="VALUE2" name="action2" />
-                <input type="submit" value="VALUE2" name="action2" />
+            <h1>Strona główna systemu alrmowego!</h1>
+            <h2>Zalogowany: {{ test }}</h2>
+
+            <form method="post" action="/login">
+                <input type="submit" value="Zaloguj" name="action2" />
+            </form>
+
+            <form method="post" action="/entries">
+                <input type="submit" value="Sprawdź wejścia" name="action1"/>
+            </form>
+      
+            <form method="post" action="/settings">
+                <input type="submit" value="Ustawienia" name="action3"/>
+
             </form>
         </div>
     </body>

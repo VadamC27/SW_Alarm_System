@@ -34,10 +34,27 @@ def index():
             print("Buton3")
 
     templateData = {
-        'title' : 'Hello world', #wszystkie rzeczy przekazywane do html
+        'title' : 'System alarmowy', #wszystkie rzeczy przekazywane do html
         'przyklad' : 'Testowy tekst',
     }
     return render_template('site.html', **templateData)
+
+@app.route('/entries', methods=['GET', 'POST'])
+def entries():
+
+    if request.method == 'POST':
+        if request.form.get('action1') == 'VALUE1':
+            print("Buton1")
+        elif  request.form.get('action2') == 'VALUE2':
+            print("Buton2")
+        elif  request.form.get('action3') == 'VALUE3':
+            print("Buton3")
+
+    templateData = {
+        'title' : 'Zarejestrowane przejścia', #wszystkie rzeczy przekazywane do html
+        'test' : 'Testowy tekst',
+    }
+    return render_template('entries.html', **templateData)
 
 
 if __name__ == '__main__':
