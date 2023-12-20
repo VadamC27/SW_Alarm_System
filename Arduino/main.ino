@@ -21,7 +21,7 @@ int length = 0;
 
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins,  ROWS, COLS ); // init keypad
 
-int isTriggered = 0; 
+bool isTriggered = false; 
 int armed = 1;
 
 boolean lockLow = true;
@@ -37,7 +37,7 @@ void clearPass(){
 
 void triggerAlarm(int pin){
     if(armed){
-      isTriggered = 1; 
+      isTriggered = true; 
       switch(pin){
       case 2:{      
         Serial.println("alrm2");
@@ -73,15 +73,16 @@ void chceckKeypad(){
     Serial.print("code");
     Serial.println(typedByUser);
 
-    /*String input = Serial.readStringUntil('\n');
+    String input = Serial.readStringUntil('\n');
     if(input == 0) return; //nie sprawdził się
     if(input == 1) { //poprawny kod zmiana stanu?!
-      
-    }*/
+      if(isTriggered ) isTriggered = false;
+      else isTriggered = true;
+    }
   }else if(key){
     typedByUser[length] = key;
     length = length + 1;
-    if(length >= 4 ) {
+    if(length >= 5 ) {
       length = 0; 
       clearPass();
     }
@@ -93,6 +94,7 @@ void setup() {
   //TODO output dla diody
   pinMode(2, INPUT); 
   pinMode(3, INPUT); 
+  pinMode(13,OUTPUT);
   attachInterrupt(digitalPinToInterrupt(2), detectionPIN2, RISING); 
   attachInterrupt(digitalPinToInterrupt(3), detectionPIN3, RISING); 
 
@@ -100,15 +102,16 @@ void setup() {
 
 void loop() {
   chceckKeypad();
- /* char key = keypad.getKey();
+  /*char key = keypad.getKey();
   
   if (key){
     Serial.println(key);
   }*/
-  /*if(isTriggered){
-    
+  if(isTriggered){
+    digitalWrite(13, HIGH);
   } else{
+    digitalWrite(13, LOW);
     //TODO dioda ma byc zgaszona 
-  }*/
+  }
  
 }
