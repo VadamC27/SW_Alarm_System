@@ -1,32 +1,44 @@
 <!DOCTYPE html>
+<html>
+
+<head>
     <style>
         .content {
             max-width: 500px;
             margin: auto;
+            text-align: center;
+        }
+
+        form {
+            margin-top: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px; /* Adjust padding for larger buttons */
+            font-size: 16px;   /* Adjust font size for larger buttons */
         }
     </style>
-    <head> 
-        <title>{{ title }}</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    </head>
-    <body>
-        <div class="content">
-            <h1>Strona główna systemu alrmowego!</h1>
-            <h2>Zalogowany: {{ test }}</h2>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 
-            <form method="post" action="/login">
-                <input type="submit" value="Zaloguj" name="action2" />
-            </form>
+<body>
+    <div class="content">
+        <h1>Strona główna systemu alarmowego!</h1>
+        <h2>Zalogowany: {{ test }}</h2>
 
-            <form method="post" action="/entries">
-                <input type="submit" value="Sprawdź wejścia" name="action1"/>
-            </form>
-      
-            <form method="post" action="/settings">
-                <input type="submit" value="Ustawienia" name="action3"/>
+        <form method="post" action="/login">
+            <input type="submit" value="Zaloguj" name="action2" />
+        </form>
 
-            </form>
-        </div>
-    </body>
+        <form method="post" action="/entries">
+            <input type="submit" value="Sprawdź wejścia" name="action1" />
+        </form>
+
+        <form method="post" action="/settings">
+            <input type="submit" value="Ustawienia" name="action3" />
+        </form>
+    </div>
+</body>
 
 </html>
