@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodawanie Użytkownika</title>
+    <style>
+        body {
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        input {
+            margin-top: 5px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Dodawanie Użytkownika</h1>
+
+    <form>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" placeholder="Wprowadź adres e-mail" required>
+
+        <label for="phoneNumber">Numer Telefonu:</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Wprowadź numer telefonu" required>
+
+        <label for="password">Kod dostępu:</label>
+        <input type="password" id="password" name="password" placeholder="Wprowadź kod dostepu" required>
+
+        <button type="button" onclick="addUser()">Dodaj Użytkownika</button>
+    </form>
+
+ </body>
+ </html>

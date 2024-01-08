@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .content {
+            max-width: 500px;
+            margin: auto;
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            width:300px; /* Set a fixed width for all buttons */
+        }
+    </style>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="content">
+        <h1>Ustawienia systemu alarmowego</h1>
+        
+        <form method="post" action="/change_code">
+            <input type="submit" value="Zmiana kodu" name="change_code" />
+        </form>
+
+        <form method="post" action="/notification_settings">
+            <input type="submit" value="Ustawienia powiadomień" name="notification_settings" />
+        </form>
+
+        <form method="post" action="/add_user">
+            <input type="submit" value="Dodaj nowego użytkownika" name="add_user" />
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,23 +1,50 @@
 <!DOCTYPE html>
+<html lang="en">
+
+<head>
     <style>
         .content {
             max-width: 500px;
             margin: auto;
+            text-align: center; /* Center the content */
+        }
+
+        h1, h2, label {
+            font-size: 24px; /* Set font size for headings and labels */
+        }
+
+        /* Add some spacing between buttons and labels */
+        .content label {
+            margin-bottom: 10px;
+            display: block; /* Ensure each label appears on a new line */
+        }
+
+        /* Add some spacing between buttons */
+        .content input[type="submit"] {
+            margin-bottom: 20px;
         }
     </style>
-    <head> 
-        <title>{{ title }}</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    </head>
-    <body>
-        <div class="content">
-            <h1>Strona główna systemu alrmowego!</h1>
-            <h2>Zalogowany: {{ test }}</h2>
-            <form method="post" action="/">
-                <input type="submit" value="VALUE1" name="action1"/>
-                <input type="submit" value="VALUE2" name="action2" />
-            </form>            
-        </div>
-    </body>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="content">
+        <h1>Czujniki: </h1>
+        <h2>Zalogowany: {{ test }}</h2>
+
+        <!-- Button for "Czujnik i w pokoju 'xxx' VALUE1" -->
+        <form method="post" action="/">
+            <label for="action1">Czujnik 1 w pokoju 'xxx'</label>
+            <input type="submit" value="VALUE1" name="action1" id="action1" />
+        </form>
+
+        <!-- Button for "Czujnik i w pokoju 'xxx' VALUE2" -->
+        <form method="post" action="/">
+            <label for="action2">Czujnik 2 w pokoju 'xxx'</label>
+            <input type="submit" value="VALUE2" name="action2" id="action2" />
+        </form>
+    </div>
+</body>
 
 </html>
