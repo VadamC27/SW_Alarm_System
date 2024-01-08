@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Użytkownika</title>
+    <style>
+        body {
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        input {
+            margin-right: 10px;
+        }
+
+        .password-group {
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ustawienia powiadomień</h1>
+
+    <form>
+        <label>
+            <input type="checkbox" id="email" name="email" value="email">
+            E-mail
+        </label>
+
+        <label>
+            <input type="checkbox" id="sms" name="sms" value="sms">
+            SMS
+        </label>
+
+        <label>
+            <input type="checkbox" id="app" name="app" value="app">
+            Powiadomienia mobilne
+        </label>
+</body>
+
+</html>
+      
