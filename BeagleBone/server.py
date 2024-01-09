@@ -75,32 +75,34 @@ def options():
 
 @app.route('/change_code', methods=['GET', 'POST'])
 def change_code():
+    error_message = None
+
     if request.method == 'POST':
-        old_password = request.form['oldPassword']
-        new_password = request.form['newPassword']
+        old_password = request.form.get('oldPassword')
+        new_password = request.form.get('newPassword')
+
+        current_user_login = 'example_user'
 
         try:
-            with sqlite3.connect('sam.db') as conn:
-                c = conn.cursor()
+            # Check if the old password matches the one in the database for the current user
+            c.execute("SELECT kod FROM kody WHERE login=? AND kod=?", (current_user_login, old_password))
+            result = c.fetchone()
 
-                c.execute("SELECT kod FROM kody WHERE login=? AND kod=?", (login, old_password))
-                result = c.fetchone()
+            if result:
+                # Update the database with the new password
+                c.execute("UPDATE kody SET kod=? WHERE login=?", (new_password, current_user_login))
+                c.commit()               
+            else:
+                error_message = "Incorrect old password. Password update failed."
+        except Exception as e:
+            error_message = "An error occurred while updating the password."
 
-                if result:
-                    c.execute("UPDATE kody SET kod=? WHERE login=?", (new_password, login))
-                    conn.commit()
-                    return "Password updated successfully!"
-                else:
-                    return "Incorrect old password. Please try again."
-        except sqlite3.Error as e:
-            print("Database error:", e)
-            return "An error occurred while updating the password."
-
-    templateData = {
+    template_data = {
         'title': 'Zmiana kodu',
         'example': 'Przykładowy tekst dla zmiany kodu',
+        'error_message': error_message,
     }
-    return render_template('password.html', **templateData)
+    return render_template('password.html', **template_data)
 
 @app.route('/notification_settings', methods=['GET', 'POST'])
 def notification_settings():
