@@ -1,50 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zarejestrowany Ruch</title>
     <style>
-        .content {
-            max-width: 500px;
-            margin: auto;
-            text-align: center; /* Center the content */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
         }
 
-        h1, h2, label {
-            font-size: 24px; /* Set font size for headings and labels */
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
         }
 
-        /* Add some spacing between buttons and labels */
-        .content label {
-            margin-bottom: 10px;
-            display: block; /* Ensure each label appears on a new line */
-        }
-
-        /* Add some spacing between buttons */
-        .content input[type="submit"] {
-            margin-bottom: 20px;
+        th {
+            background-color: #f2f2f2;
         }
     </style>
-    <title>{{ title }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
-    <div class="content">
-        <h1>Czujniki: </h1>
-        <h2>Zalogowany: {{ test }}</h2>
-
-        <!-- Button for "Czujnik i w pokoju 'xxx' VALUE1" -->
-        <form method="post" action="/">
-            <label for="action1">Czujnik 1 w pokoju 'xxx'</label>
-            <input type="submit" value="VALUE1" name="action1" id="action1" />
-        </form>
-
-        <!-- Button for "Czujnik i w pokoju 'xxx' VALUE2" -->
-        <form method="post" action="/">
-            <label for="action2">Czujnik 2 w pokoju 'xxx'</label>
-            <input type="submit" value="VALUE2" name="action2" id="action2" />
-        </form>
-    </div>
+    <h2>Zarejestrowany Ruch w Czujnikach</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>ID Czujnika</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Python loop to fetch and display data from the 'zarejestrowan_ruch' table -->
+            {% for row in rows_from_database %}
+                <tr>
+                    <td>{{ row['data'] }}</td>
+                    <td>{{ row['id_czujnika'] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
-
 </html>
