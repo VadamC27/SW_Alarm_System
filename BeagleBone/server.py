@@ -9,6 +9,8 @@ app = Flask(__name__)
 conn = sqlite3.connect('sam.db')
 c = conn.cursor()
 
+login = 'example_user'
+
 def executeScriptsFromFile(filename):
     fd = open(filename, 'r')
     sqlFile = fd.read()
@@ -73,6 +75,27 @@ def options():
 
 @app.route('/change_code', methods=['GET', 'POST'])
 def change_code():
+    if request.method == 'POST':
+        old_password = request.form['oldPassword']
+        new_password = request.form['newPassword']
+
+        try:
+            with sqlite3.connect('sam.db') as conn:
+                c = conn.cursor()
+
+                c.execute("SELECT kod FROM kody WHERE login=? AND kod=?", (login, old_password))
+                result = c.fetchone()
+
+                if result:
+                    c.execute("UPDATE kody SET kod=? WHERE login=?", (new_password, login))
+                    conn.commit()
+                    return "Password updated successfully!"
+                else:
+                    return "Incorrect old password. Please try again."
+        except sqlite3.Error as e:
+            print("Database error:", e)
+            return "An error occurred while updating the password."
+
     templateData = {
         'title': 'Zmiana kodu',
         'example': 'Przykładowy tekst dla zmiany kodu',
@@ -99,6 +122,8 @@ if __name__ == '__main__':
     executeScriptsFromFile("kod_do_bazy_danych.sql")
     c.execute("INSERT INTO czujniki(id_czujnika, nazwa) values(?,?)",(2,"czujnik_1"))
     c.execute("INSERT INTO czujniki(id_czujnika, nazwa) values(?,?)",(3,"czujnik_2"))
+    c.execute("INSERT INTO uzytkownicy(login,haslo) values(?,?)",("admin","admin"))
+    c.execute("INSERT INTO kody(login, kod) values(?,?)",("example_user","1234"))
     conn.commit()
     app.run(debug=True, port=8080, host='0.0.0.0')
 
