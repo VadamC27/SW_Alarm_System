@@ -6,7 +6,7 @@ CREATE TABLE kody(login TEXT NOT NULL,
                   typ TEXT,
                   FOREIGN KEY (login) REFERENCES uzytkownicy(login));
 
-CREATE TABLE czujniki(id_czujnika INTEGER PRIMARY KEY NOT NULL,
+CREATE TABLE czujniki(id_czujnika INTEGER NOT NULL,
                       nazwa TEXT NULL);       
 
 CREATE TABLE obserwowane_czujniki(login TEXT NOT NULL,

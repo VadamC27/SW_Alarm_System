@@ -24,9 +24,11 @@ while True:
         if data[4] == "2":
             date = date.now()
             c.execute("INSERT INTO zarejestrowan_ruch(data, id_czujnika) values(?,?)",date,2)
+            conn.commit()
         elif data[4] == "3":
             date = date.now()
             c.execute("INSERT INTO zarejestrowan_ruch(data, id_czujnika) values(?,?)",date,3)       
+            conn.commit()
 
     elif message == "code":
         code = data[4:8]

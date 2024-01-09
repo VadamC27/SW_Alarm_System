@@ -3,17 +3,6 @@
 from flask import Flask, render_template, request
 import sqlite3
 from sqlite3 import OperationalError
-#import Adafruit_BBIO.UART as UART
-#import serial
-
-pin = 'P9_26'
-#UART.setup("UART1") # Konfiguracja UART1
-#ser = serial.Serial(port="/dev/ttyS1", baudrate=9600) # Konfiguracja portu szeregowego
-#ser.close()
-#ser.open()
-
-#if ser.isOpen():
-#    kod = ser.readline()
 
 app = Flask(__name__)
 
@@ -108,7 +97,8 @@ def add_user():
 
 if __name__ == '__main__':
     executeScriptsFromFile("kod_do_bazy_danych.sql")
+    c.execute("INSERT INTO czujniki(id_czujnika, nazwa) values(?,?)",(2,"czujnik_1"))
+    c.execute("INSERT INTO czujniki(id_czujnika, nazwa) values(?,?)",(3,"czujnik_2"))
+    conn.commit()
     app.run(debug=True, port=8080, host='0.0.0.0')
 
-
-#ser.close() # Zamknięcie połączenia szeregowego
