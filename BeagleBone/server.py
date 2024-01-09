@@ -12,9 +12,16 @@ def get_db():
         g.db.row_factory = sqlite3.Row
     return g.db
 
+
 def close_db(error):
     if 'db' in g:
         g.db.close()
+login = 'example_user'
+
+def executeScriptsFromFile(filename):
+    fd = open(filename, 'r')
+    sqlFile = fd.read()
+    fd.close()
 
 def execute_scripts_from_file(filename):
     with app.app_context():
@@ -81,9 +88,32 @@ def options():
 
 @app.route('/change_code', methods=['GET', 'POST'])
 def change_code():
+    error_message = None
+
+    if request.method == 'POST':
+        old_password = request.form.get('oldPassword')
+        new_password = request.form.get('newPassword')
+
+        current_user_login = 'example_user'
+
+        try:
+            # Check if the old password matches the one in the database for the current user
+            c.execute("SELECT kod FROM kody WHERE login=? AND kod=?", (current_user_login, old_password))
+            result = c.fetchone()
+
+            if result:
+                # Update the database with the new password
+                c.execute("UPDATE kody SET kod=? WHERE login=?", (new_password, current_user_login))
+                c.commit()               
+            else:
+                error_message = "Incorrect old password. Password update failed."
+        except Exception as e:
+            error_message = "An error occurred while updating the password."
+
     template_data = {
         'title': 'Zmiana kodu',
         'example': 'Przykładowy tekst dla zmiany kodu',
+        'error_message': error_message,
     }
     return render_template('password.html', **template_data)
 
@@ -106,4 +136,10 @@ def add_user():
 if __name__ == '__main__':
     execute_scripts_from_file("kod_do_bazy_danych.sql")
     app.teardown_appcontext(close_db)
+    executeScriptsFromFile("kod_do_bazy_danych.sql")
+    c.execute("INSERT INTO czujniki(id_czujnika, nazwa) values(?,?)",(2,"czujnik_1"))
+    c.execute("INSERT INTO czujniki(id_czujnika, nazwa) values(?,?)",(3,"czujnik_2"))
+    c.execute("INSERT INTO uzytkownicy(login,haslo) values(?,?)",("admin","admin"))
+    c.execute("INSERT INTO kody(login, kod) values(?,?)",("example_user","1234"))
+    conn.commit()
     app.run(debug=True, port=8080, host='0.0.0.0')

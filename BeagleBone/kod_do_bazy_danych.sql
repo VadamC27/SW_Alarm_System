@@ -1,8 +1,8 @@
-CREATE TABLE uzytkownicy (login TEXT PRIMARY KEY NOT NULL, 
+CREATE TABLE uzytkownicy (login TEXT NOT NULL, 
                         haslo TEXT NOT NULL);
 
 CREATE TABLE kody(login TEXT NOT NULL,
-                  kod TEXT PRIMARY KEY NOT NULL,
+                  kod TEXT NOT NULL,
                   typ TEXT,
                   FOREIGN KEY (login) REFERENCES uzytkownicy(login));
 
