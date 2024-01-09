@@ -14,8 +14,18 @@
         }
 
         input[type="submit"] {
-            padding: 10px 20px; /* Adjust padding for larger buttons */
-            font-size: 16px;   /* Adjust font size for larger buttons */
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
         }
     </style>
     <title>{{ title }}</title>
@@ -25,18 +35,12 @@
 <body>
     <div class="content">
         <h1>Strona główna systemu alarmowego!</h1>
-        <h2>Zalogowany: {{ test }}</h2>
-
         <form method="post" action="/login">
+            <input type="text" placeholder="Nazwa użytkownika" name="username" required>
+            <br>
+            <input type="password" placeholder="Hasło" name="password" required>
+            <br>
             <input type="submit" value="Zaloguj" name="action2" />
-        </form>
-
-        <form method="post" action="/entries">
-            <input type="submit" value="Sprawdź wejścia" name="action1" />
-        </form>
-
-        <form method="post" action="/options">
-            <input type="submit" value="Ustawienia" name="action3" />
         </form>
     </div>
 </body>
