@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+!/usr/bin/env python
 
 import sqlite3
 from sqlite3 import OperationalError
@@ -17,33 +17,32 @@ ser.open()
 
 while True:
     if ser.isOpen():
-      data = ser.readline()
+        data = ser.readline().rstrip().decode('utf-8')
     message = data[0:4]
-
+    print(data)
     if message == "alrm":
         if data[4] == "2":
-            date = date.now()
-            c.execute("INSERT INTO zarejestrowan_ruch(data, id_czujnika) values(?,?)",date,2)
+            date = datetime.now()
+            c.execute("INSERT INTO zarejestrowan_ruch(data, id_czujnika) values(?,?)",(date,2))
             conn.commit()
         elif data[4] == "3":
-            date = date.now()
-            c.execute("INSERT INTO zarejestrowan_ruch(data, id_czujnika) values(?,?)",date,3)       
+            date = datetime.now()
+            c.execute("INSERT INTO zarejestrowan_ruch(data, id_czujnika) values(?,?)",(date,3))
             conn.commit()
 
     elif message == "code":
         code = data[4:8]
-        query = f"SELECT COUNT(*) FROM tabela_kody WHERE kod = '{code}' AND LENGTH(kod) = 4;"
+        query = f"SELECT COUNT(*) FROM kody WHERE kod = '{code}' AND LENGTH(kod) = 4;"
         c.execute(query)
         result = c.fetchone()[0]
         if result>0 :
             message = "1"
-            ser.write(message.encode()) #kod w arduino nie jest w cudzysłowiach!!!!!
+            ser.write(message.encode())
         else:
             message = "0"
-            ser.write(message.encode()) #kod w arduino nie jest w cudzysłowiach!!!!!
+            ser.write(message.encode()) 
 
     elif message == "errn":
         print("Nieznany czujnik")
        
-    
     
