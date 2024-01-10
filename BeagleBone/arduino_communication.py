@@ -1,4 +1,4 @@
-!/usr/bin/env python
+#!/usr/bin/env python
 
 import sqlite3
 from sqlite3 import OperationalError
@@ -37,12 +37,20 @@ while True:
         result = c.fetchone()[0]
         if result>0 :
             message = "1"
-            ser.write(message.encode())
+            ser.write(message.encode()) 
         else:
             message = "0"
             ser.write(message.encode()) 
 
     elif message == "errn":
         print("Nieznany czujnik")
-       
-    
+
+    elif message == "armd":
+        if data[4] == "1":
+            c.execute("UPDATE isTriggered SET state = '1';")
+            conn.commit()
+        elif data[4] == "0":
+            c.execute("UPDATE isTriggered SET state = '0';")
+            conn.commit()
+        else:
+            print("Error: armed state unknown!!!")
