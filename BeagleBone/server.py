@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from flask import Flask, render_template, request, g
+from flask import Flask, render_template, request, g, redirect, url_for
 import sqlite3
 from sqlite3 import OperationalError
 
@@ -53,11 +53,50 @@ def index():
     }
     return render_template('site.html', **template_data)
 
+def validate_login(username, password):
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM uzytkownicy WHERE login=?", (username,))
+        user_data = cursor.fetchone()
+
+        if user_data is not None:
+            if user_data['haslo'] == password:
+                return 'success'
+            else:
+                return 'incorrect_password'
+        else:
+            return 'incorrect_username'
+    except Exception as e:
+        print("Error during login validation:", e)
+        return 'error'
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    error_message = None
+
+    if request.method == 'POST':
+        if request.form.get('action2') == 'Zaloguj':
+            username = request.form.get('username')
+            password = request.form.get('password')
+
+            # Validate login and password against the database
+            login_result = validate_login(username, password)
+
+            if login_result == 'success':
+                # Successful login
+                return redirect(url_for('index'))
+            else:
+                # Failed login
+                if login_result == 'incorrect_username':
+                    error_message = 'Błędna nazwa użytkownika.'
+                elif login_result == 'incorrect_password':
+                    error_message = 'Błędny kod.'
+
     template_data = {
-        'title': 'Logowanie',
-        'example': 'Przykładowy tekst dla logowania',
+        'title': 'System alarmowy',
+        'example': 'Testowy tekst',
+        'error_message': error_message,
     }
     return render_template('login.html', **template_data)
 
@@ -90,20 +129,25 @@ def change_code():
         current_user_login = 'example_user'
 
         try:
-            # Check if the old password matches the one in the database for the current user
-            db = get_db()
-            cursor = db.cursor()
-            cursor.execute("SELECT kod FROM kody WHERE login=? AND kod=?", (current_user_login, old_password))
-            result = cursor.fetchone()
+            # Check if the form is submitted with non-empty values
+            if old_password.strip() and new_password.strip():
+                # Check if the old password matches the one in the database for the current user
+                db = get_db()
+                cursor = db.cursor()
+                cursor.execute("SELECT kod FROM kody WHERE login=? AND kod=?", (current_user_login, old_password))
+                result = cursor.fetchone()
 
-            if result:
-                # Update the database with the new password
-                cursor.execute("UPDATE kody SET kod=? WHERE login=?", (new_password, current_user_login))
-                db.commit()
+                if result:
+                    # Update the database with the new password
+                    cursor.execute("UPDATE kody SET kod=? WHERE login=?", (new_password, current_user_login))
+                    db.commit()
+                else:
+                    error_message = "Niepoprawny stary kod."
             else:
-                error_message = "Incorrect old password. Password update failed."
+                error_message = "Musisz wpisac stary i nowy kod."
+
         except Exception as e:
-            error_message = "An error occurred while updating the password."
+            error_message = ""
 
     template_data = {
         'title': 'Zmiana kodu',
@@ -111,6 +155,7 @@ def change_code():
         'error_message': error_message,
     }
     return render_template('password.html', **template_data)
+
 
 @app.route('/notification_settings', methods=['GET', 'POST'])
 def notification_settings():
