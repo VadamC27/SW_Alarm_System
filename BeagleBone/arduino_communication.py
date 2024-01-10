@@ -37,10 +37,10 @@ while True:
         result = c.fetchone()[0]
         if result>0 :
             message = "1"
-            ser.write(message.encode()) 
+            ser.write(message.encode()) #kod w arduino nie jest w cudzysłowiach!!!!!
         else:
             message = "0"
-            ser.write(message.encode()) 
+            ser.write(message.encode()) #kod w arduino nie jest w cudzysłowiach!!!!!
 
     elif message == "errn":
         print("Nieznany czujnik")
@@ -54,3 +54,6 @@ while True:
             conn.commit()
         else:
             print("Error: armed state unknown!!!")
+
+    
+    
