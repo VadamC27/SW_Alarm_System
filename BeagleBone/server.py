@@ -3,8 +3,50 @@
 from flask import Flask, render_template, request, g, redirect, url_for
 import sqlite3
 from sqlite3 import OperationalError
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 app = Flask(__name__)
+
+def send_email(subject, body, to_email):
+    # Konfiguracja parametrów serwera SMTP
+    smtp_server = 'smtp.gmail.com'
+    smtp_port = 587
+    smtp_username = 'marianowicka1236@gmail.com'
+    smtp_password = 'erki xrqj rmpl tbbo'
+
+    # Adres e-mail nadawcy
+    from_email = 'marianowicka1236@gmail.com'
+
+    # Tworzenie obiektu MIME do przechowywania wiadomości
+    msg = MIMEMultipart()
+    msg['From'] = from_email
+    msg['To'] = to_email
+    msg['Subject'] = subject
+
+    # Dodawanie treści wiadomości
+    msg.attach(MIMEText(body, 'plain'))
+
+    # Inicjalizacja połączenia SMTP
+    server = smtplib.SMTP(smtp_server, smtp_port)
+    server.starttls()
+
+    # Logowanie do konta e-mail
+    server.login(smtp_username, smtp_password)
+
+    # Wysyłanie wiadomości
+    server.sendmail(from_email, to_email, msg.as_string())
+
+    # Zamykanie połączenia
+    server.quit()
+
+def get_mail():
+    subject = 'Testowa wiadomość'
+    body = 'Cześć, to jest treść testowej wiadomości.'
+    to_email = 'mysiol007@gmail.com'
+
+    send_email(subject, body, to_email)
 
 def get_db():
     if 'db' not in g:
