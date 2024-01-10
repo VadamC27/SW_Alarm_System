@@ -89,9 +89,24 @@ def index():
         elif request.form.get('action3') == 'VALUE3':
             print("Button 3")
 
+    state = 1
+    with app.app_context():
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute('SELECT state FROM isTriggered LIMIT 1')
+        state = cursor.fetchone()
+    state = tuple(state)[0]
+    print(state)
+    if state == "1":
+        infoText = "STAN SYSTEMU: ZAZBROJONY!"
+    elif state == "0":
+        infoText = "STAN SYSTEMU: ROZBROJONY!"
+    else:
+        infoText = "STAN SYSTEMU: NIEZNANY"
+
     template_data = {
         'title': 'System alarmowy',
-        'example': 'Testowy tekst',
+        'info': infoText,
     }
     return render_template('site.html', **template_data)
 
@@ -224,6 +239,8 @@ if __name__ == '__main__':
         c.execute("INSERT INTO czujniki(id_czujnika, nazwa) values(?,?)",(3,"czujnik_2"))
         c.execute("INSERT INTO uzytkownicy(login,haslo) values(?,?)",("admin","admin"))
         c.execute("INSERT INTO kody(login, kod) values(?,?)",("example_user","1234"))
+
+        c.execute("DELETE FROM zarejestrowan_ruch")
         db.commit()
 
     app.teardown_appcontext(close_db)

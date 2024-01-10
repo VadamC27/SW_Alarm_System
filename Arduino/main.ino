@@ -74,11 +74,25 @@ void chceckKeypad(){
     Serial.println(typedByUser);
 
     String input = Serial.readStringUntil('\n');
-    if(input == 0) return; //nie sprawdził się
-    if(input == 1) { //poprawny kod zmiana stanu?!
-      if(isTriggered ) isTriggered = false;
-      else isTriggered = true;
+    Serial.println(input);
+    if(input == "0") return; //nie sprawdził się
+
+    if(input == "1") { //correct code
+      if(armed){
+        armed = false; //change state
+        Serial.println("armd0");
+      }  
+      else {
+        armed = true;
+        Serial.println("armd1");
+      }
+      isTriggered = false; //turn off the alarm
     }
+
+    //clear pass
+    length = 0;
+    clearPass();
+
   }else if(key){
     typedByUser[length] = key;
     length = length + 1;

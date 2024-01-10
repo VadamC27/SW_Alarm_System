@@ -18,3 +18,6 @@ CREATE TABLE zarejestrowan_ruch (data TEXT NOT NULL,
                                 id_czujnika TEXT NOT NULL,
                                 FOREIGN KEY (id_czujnika) REFERENCES czujniki(id_czujnika));
 
+CREATE TABLE isTriggered (state TEXT NOT NULL);
+
+INSERT INTO isTriggered(state) VALUES('1');
