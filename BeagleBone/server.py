@@ -213,6 +213,43 @@ def change_code():
     }
     return render_template('password.html', **template_data)
 
+@app.route('/password_change', methods=['GET', 'POST'])
+def password_change():
+    error_message = None
+
+    if request.method == 'POST':
+        old_password = request.form.get('oldPassword')
+        new_password = request.form.get('newPassword')
+
+        current_user_login = 'example_user'
+
+        try:
+            # Check if the form is submitted with non-empty values
+            if old_password.strip() and new_password.strip():
+                # Check if the old password matches the one in the database for the current user
+                db = get_db()
+                cursor = db.cursor()
+                cursor.execute("SELECT haslo FROM uzytkownicy WHERE login=? AND haslo=?", (current_user_login, old_password))
+                result = cursor.fetchone()
+
+                if result:
+                    # Update the database with the new password
+                    cursor.execute("UPDATE uzytkownicy SET haslo=? WHERE login=?", (new_password, current_user_login))
+                    db.commit()
+                else:
+                    error_message = "Niepoprawne stare hasło."
+            else:
+                error_message = "Musisz wpisac stare i nowe hasło."
+
+        except Exception as e:
+            error_message = ""
+
+    template_data = {
+        'title': 'Zmiana kodu',
+        'example': 'Przykładowy tekst dla zmiany kodu',
+        'error_message': error_message,
+    }
+    return render_template('password_change.html', **template_data)
 
 @app.route('/notification_settings', methods=['GET', 'POST'])
 def notification_settings():
