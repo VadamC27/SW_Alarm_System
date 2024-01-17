@@ -1,3 +1,7 @@
+mport smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
 # setup database
 conn = sqlite3.connect('sam.db')
 c = conn.cursor()
