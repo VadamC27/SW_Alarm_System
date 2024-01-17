@@ -1,0 +1,70 @@
+# setup database
+conn = sqlite3.connect('sam.db')
+c = conn.cursor()
+
+# setup communication
+pin = 'P9_26'
+UART.setup("UART1")  # Config UART1
+ser = serial.Serial(port="/dev/ttyS1", baudrate=9600)  # Config serial port
+ser.close()
+ser.open()
+
+def send_email(subject, body, to_email):
+    # Konfiguracja parametrów serwera SMTP
+    smtp_server = 'smtp.gmail.com'
+    smtp_port = 587
+    smtp_username = 'marianowicka1236@gmail.com'
+    smtp_password = 'erki xrqj rmpl tbbo'
+
+    # Adres e-mail nadawcy
+    from_email = 'marianowicka1236@gmail.com'
+
+    # Tworzenie obiektu MIME do przechowywania wiadomości
+    msg = MIMEMultipart()
+    msg['From'] = from_email
+    msg['To'] = to_email
+    msg['Subject'] = subject
+
+    # Dodawanie treści wiadomości
+    msg.attach(MIMEText(body, 'plain'))
+
+    # Inicjalizacja połączenia SMTP
+    server = smtplib.SMTP(smtp_server, smtp_port)
+    server.starttls()
+
+    # Logowanie do konta e-mail
+    server.login(smtp_username, smtp_password)
+
+    # Wysyłanie wiadomości
+    server.sendmail(from_email, to_email, msg.as_string())
+
+    # Zamykanie połączenia
+    server.quit()
+
+
+def get_mail():
+    subject = 'ALARM AKTYWOWANY'
+    body = 'CZUJNIK NR 2 WYKRYŁ RUCH'
+    to_email = 'mysiol007@gmail.com'
+    send_email(subject, body, to_email)
+
+
+# wait and handle incoming messages
+while True:
+    if ser.isOpen():  # decode message
+        data = ser.readline().rstrip().decode('utf-8')
+        message = data[0:4]  # strip to code name
+        print(data)
+
+        # ... (rest of your existing code)
+
+        # Fetch all email addresses from the 'uzytkownicy' table
+        c.execute("SELECT email FROM uzytkownicy;")
+        emails = c.fetchall()
+
+        # Send email to each user
+        subject = 'ALARM AKTYWOWANY'
+        body = 'CZUJNIK NR 2 WYKRYŁ RUCH'
+        for email in emails:
+            to_email = email[0]
+            send_email(subject, body, to_email)
